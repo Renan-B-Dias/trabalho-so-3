@@ -21,78 +21,89 @@ public class MainMemoryBestFit {
 	}
 
 	private Boolean put(Segment seg, boolean msg) {
-		if (seg.segId < 0 || seg.segId > nSegments - 1) {
-			System.out.println("Segmento " + seg.segId + " invalido!");
-			return false;
-		}
+		
+		try{
+			
+			if (seg.segId < 0 || seg.segId > nSegments - 1) {
+				throw new Exception ("Segmento " + seg.segId + " invalido!");
+			}
 
-		else if (inMemory(seg.segId)) {
-			System.out.println("Segmento " + seg.segId + " ja esta na memoria!");
-			return false;
-		} else {
+			else if (inMemory(seg.segId)) {
+				throw new Exception ("Segmento " + seg.segId + " ja esta na memoria!");
+			} else {
 
-			int count = 0;
-			ArrayList<SegmentControll> array = new ArrayList<>();
+				int count = 0;
+				ArrayList<SegmentControll> array = new ArrayList<>();
 
-			for (int i = 0; i < mainMemory.length; i++) {
+				for (int i = 0; i < mainMemory.length; i++) {
 
-				if (mainMemory[i] == null && i + 1 != mainMemory.length) {
-					count++;
-				} else {
+					if (mainMemory[i] == null && i + 1 != mainMemory.length) {
+						count++;
+					} else {
+						
+						if (i + 1 == mainMemory.length && count + 1 >= seg.segSize) {
+							array.add(new SegmentControll((i - count), i - 1));
+							count = 0;
+						}
+
+						if (count >= seg.segSize) {
+							array.add(new SegmentControll((i - count), i - 1));
+							count = 0;
+						}
+					}
+				}
+
+				if (array.isEmpty()) {
+					pendingQueue.add(seg);
+					return false;
+				}else {
 					
-					if (i + 1 == mainMemory.length && count + 1 >= seg.segSize) {
-						array.add(new SegmentControll((i - count), i - 1));
-						count = 0;
-					}
+					Collections.sort(array);
+					SegmentControll least = array.get(0);
 
-					if (count >= seg.segSize) {
-						array.add(new SegmentControll((i - count), i - 1));
-						count = 0;
+					int begin = least.begin;
+					int siz = seg.segSize;
+
+					for (int f = 0; f < siz; f++, begin++) {
+						mainMemory[begin] = seg;
 					}
+					 if(msg)
+		                    System.out.println("Segmento " + seg.segId + " foi inserido na memória!");
+		             return true;
 				}
 			}
 
-			if (array.isEmpty()) {
-				pendingQueue.add(seg);
-				return false;
-			}else {
-
-				Collections.sort(array);
-
-				SegmentControll least = array.get(0);
-
-				int begin = least.begin;
-				int siz = seg.segSize;
-
-				for (int f = 0; f < siz; f++, begin++) {
-					mainMemory[begin] = seg;
-				}
-				 if(msg)
-	                    System.out.println("Segmento " + seg.segId + " foi inserido na memória!");
-	             return true;
-			}
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+			return false;
 		}
-	}
+		
+			}
 	
-	public void delSeg(Segment seg) {
-        if(seg.segId < 0 || seg.segId > nSegments)
-            System.out.println("Numero de segmento " + seg.segId + " invalido");
-        else if(!inMemory(seg.segId))
-            System.out.println("Segmento " + seg.segId + " não está na memória");
-        else
-            remove(seg.segId);
+    public void delSeg(Segment seg) {
+        try{
+     	   if(seg.segId < 0 || seg.segId > nSegments)
+     		   throw new Exception("Número de segmento " + seg.segId + " inválido!");
+            else if(!inMemory(seg.segId))
+         	   throw new Exception("Segmento " + seg.segId + " não está na memória");
+            else
+                remove(seg.segId);
 
-            if(!pendingQueue.isEmpty()) {
-                Segment pended[] = new Segment[pendingQueue.size()];
-                pended = pendingQueue.toArray(pended);
-                pendingQueue = new PriorityQueue<>();
-                for(Segment x: pended) {
-                    Boolean inserted = put(x, false);
-                    if(inserted)
-                        System.out.println("Segmento " + x.segId + " que estava na lista de pendências foi inserido na memória");
+                if(!pendingQueue.isEmpty()) {
+                    Segment pended[] = new Segment[pendingQueue.size()];
+                    pended = pendingQueue.toArray(pended);
+                    pendingQueue = new PriorityQueue<>();
+                    for(Segment x: pended) {
+                        Boolean inserted = put(x, false);
+                        if(inserted)
+                            System.out.println("Segmento " + x.segId + " que estava na lista de pendências foi inserido na memória");
+                    }
                 }
-            }
-    }
+                
+        }catch(Exception e){
+     	   System.out.println(e.getMessage());
+        }
+     }
 	
 
 	public void printAllMain() {
