@@ -17,7 +17,7 @@ public class MainMemoryFirstFit {
 		this.pendingQueue = new PriorityQueue<>();
 	}
 
-	public void put(Segment seg) {
+	public void inserir(Segment seg) {
 		int count = 0;
 		boolean hasSpace = false;
 
@@ -30,8 +30,6 @@ public class MainMemoryFirstFit {
 						if(mainMemory[j].segId == seg.segId)
 							throw new Exception("Erro2");
 				}
-				
-				
 			}
 			
 			
@@ -66,6 +64,47 @@ public class MainMemoryFirstFit {
 			}
 		}
 	}
+	
+	public void remover(Segment seg) {
+		
+		try{
+			if(seg.segId < 0 || seg.segId > nSegments - 1){
+				throw new Exception("Erro1");
+			}else{
+				for (int j = 0; j < mainMemory.length; j++) {
+					boolean aux = false;
+					if (mainMemory[j] != null )
+						if(mainMemory[j].segId == seg.segId)
+							aux = true;
+					if(!aux){
+						throw new Exception("Erro2");
+					}
+				}
+			}
+			
+			
+			for(int i = 0; i < mainMemory.length; i++) {
+				if (mainMemory[i] != null)
+					if(mainMemory[i].segId == seg.segId)
+						mainMemory[i] = null;
+			}
+			
+			if(!pendingQueue.isEmpty()){
+				while(pendingQueue.size() > 0){
+					inserir(pendingQueue.poll());
+				}
+			}
+			 
+		            
+		} catch (Exception e) {
+			if(e.getMessage().equals("Erro1")){
+				System.out.println("Número de segmento "+ seg.segId + " inválido!");
+			}else if(e.getMessage().equals("Erro2")){
+				System.out.println("Segmento "+ seg.segId + " não está na memória!");
+			}
+		}
+       
+    }
 
 	public void printAll() {
 		for (Segment x : mainMemory)
