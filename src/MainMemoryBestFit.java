@@ -149,19 +149,23 @@ public class MainMemoryBestFit {
      * Método que printa a memória principal
      */
 	public void printAllMain() {
+		System.out.println("Memória Principal:");
 		for (Segment x : mainMemory)
 			if (x == null)
 				System.out.printf("%s ", "null");
 			else
 				System.out.printf("%d ", x.segId);
+		System.out.println();
 	}
 	
 	/**
      * Método que printa a fila de pendência
      */
 	public void printAllPending() {
+		System.out.println("Fila de Pendências:");
 		for (Segment x : pendingQueue)
 			System.out.printf("%d ", x.segId);
+		System.out.println();
 	}
 
 	/**
