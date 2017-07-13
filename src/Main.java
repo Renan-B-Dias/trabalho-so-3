@@ -60,6 +60,24 @@ public class Main {
         mem.printAllPending();
         System.out.println();
 
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+
+        System.out.println("Best Fit Test!!!!!!!!!!");
+        MainMemoryBestFit bestFit = new MainMemoryBestFit(13);
+        bestFit.put(new Segment(1, 2));
+        bestFit.put(new Segment(2, 3));
+        bestFit.remove(1);
+        bestFit.put(new Segment(3, 2));
+
+        bestFit.printAllMain();
+        System.out.println();
+        bestFit.printAllPending();
+        System.out.println();
+
     }
 
 }
