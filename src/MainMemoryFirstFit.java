@@ -1,25 +1,51 @@
 import java.util.*;
 
 /**
- * Created by renan on 10/07/2017.
+ * Classe que simula uma memória principal com alocação First-Fit
  */
 public class MainMemoryFirstFit {
-
+	
+	/**
+     * Memória principal
+     */
     private Segment[] mainMemory;
+    
+    /**
+     * Quantidade de segmentos que serão ser colocadas na memória principal
+     */
     private int nSegments;
-
+    
+    /**
+     * Fila dos segmentos que estão em  pendência.
+     */
     private PriorityQueue<Segment> pendingQueue;
 
-    public MainMemoryFirstFit(int mainBytes) {
+	/**
+     * Construtor da classe MainMemoryFirstFit
+     * @param mainBytes tamanho da memoria principal.
+     * @param nSeg quantidade de segmentos que irá receber.
+     * @return
+     */
+    public MainMemoryFirstFit(int mainBytes, int nSeg) {
         mainMemory = new Segment[mainBytes];
-        this.nSegments = mainBytes;
+        this.nSegments = nSeg;
         this.pendingQueue = new PriorityQueue<>();
     }
 
-    public void put(Segment seg) {
-        put(seg, true);
-    }
-
+	/**
+     * Método public de inserção do segmento na memoria principal
+     * @param seg Segmento.
+     */
+	public void put(Segment seg) {
+		put(seg, true);
+	}
+	
+	/**
+     * Método private de  inserção do segmento na memoria principal
+     * @param seg Segmento
+     * @param msg Boolean que irá defenir se é uma inserção da lista pendente ou de uma nova solicitação
+     * @return
+     */
     private Boolean put(Segment seg, boolean msg) {
     	try{
     		
@@ -69,56 +95,76 @@ public class MainMemoryFirstFit {
         
     }
 
+	/**
+     * Método de deletar o segmento da memória principal
+     * @param seg Segmento.
+     */
     public void delSeg(Segment seg) {
-       try{
-    	   if(seg.segId < 0 || seg.segId > nSegments)
-    		   throw new Exception("Número de segmento " + seg.segId + " inválido!");
-           else if(!inMemory(seg.segId))
-        	   throw new Exception("Segmento " + seg.segId + " não está na memória");
-           else
-               remove(seg.segId);
-
-               if(!pendingQueue.isEmpty()) {
-                   Segment pended[] = new Segment[pendingQueue.size()];
-                   pended = pendingQueue.toArray(pended);
-                   pendingQueue = new PriorityQueue<>();
-                   for(Segment x: pended) {
-                       Boolean inserted = put(x, false);
-                       if(inserted)
-                           System.out.println("Segmento " + x.segId + " que estava na lista de pendências foi inserido na memória");
-                   }
-               }
-               
-       }catch(Exception e){
-    	   System.out.println(e.getMessage());
-       }
-    }
-
-    public void printAllMain() {
-        for(Segment x: mainMemory)
-            if(x == null)
-                System.out.printf("%s ", "null");
+        try{
+        	// Verificação das Exceções
+     	   if(seg.segId < 0 || seg.segId > nSegments)
+     		   throw new Exception("Número de segmento " + seg.segId + " inválido!");
+            else if(!inMemory(seg.segId))
+         	   throw new Exception("Segmento " + seg.segId + " não está na memória");
             else
-                System.out.printf("%d ", x.segId);
-    }
+                remove(seg.segId); // Caso passe das Exceções irá remover o segmento
+     	   		
+     	   		// Após a remoção irá executar a inserção se possível dos segmentos que estão na fila de pendentes
+                if(!pendingQueue.isEmpty()) {
+                    Segment pended[] = new Segment[pendingQueue.size()];
+                    pended = pendingQueue.toArray(pended);
+                    pendingQueue = new PriorityQueue<>();
+                    for(Segment x: pended) {
+                        Boolean inserted = put(x, false);
+                        if(inserted)
+                            System.out.println("Segmento " + x.segId + " que estava na lista de pendências foi inserido na memória");
+                    }
+                }
+                
+        }catch(Exception e){
+     	   System.out.println(e.getMessage());
+        }
+     }
+    /**
+     * Método que executa a remoção do segmento
+     * @param segId  id único do segmento.
+     */
+	public void remove(int segId) {
+		for (int i = 0; i < mainMemory.length; i++)
+			if (mainMemory[i] != null)
+				if (mainMemory[i].segId == segId)
+					mainMemory[i] = null;
+		System.out.println("Segmento " + segId + " removido da memoria!");
+	}
+    
+    /**
+     * Método que printa a memória principal
+     */
+	public void printAllMain() {
+		for (Segment x : mainMemory)
+			if (x == null)
+				System.out.printf("%s ", "null");
+			else
+				System.out.printf("%d ", x.segId);
+	}
+	
+	/**
+     * Método que printa a fila de pendência
+     */
+	public void printAllPending() {
+		for (Segment x : pendingQueue)
+			System.out.printf("%d ", x.segId);
+	}
 
-    public void printAllPending() {
-        for(Segment x: pendingQueue)
-            System.out.printf("%d ", x.segId);
-    }
-
-    private void remove(int segId) {
-        for(int i = 0; i < mainMemory.length; i++)
-            if(mainMemory[i] != null)
-                if(mainMemory[i].segId == segId)
-                    mainMemory[i] = null;
-        System.out.println("Segmento " + segId + " removido da memória!");
-    }
-
-    private Boolean inMemory(int segId) {
-        for(Segment x: mainMemory)
-            if(x != null && x.segId == segId)
-                return true;
-        return false;
-    }
+	/**
+     * Método de verifica se o segmento se encontra na memória principal
+     * @param segId id úncido do segmento
+     * @return
+     */
+	private Boolean inMemory(int segId) {
+		for (Segment x : mainMemory)
+			if (x != null && x.segId == segId)
+				return true;
+		return false;
+	}
 }
