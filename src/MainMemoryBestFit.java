@@ -68,7 +68,7 @@ public class MainMemoryBestFit {
 					mainMemory[begin] = seg;
 				}
 				 if(msg)
-	                    System.out.println("Segmento " + seg.segId + " foi inserido na memória!");
+	                    System.out.println("Segmento " + seg.segId + " foi inserido na memaria!");
 	             return true;
 			}
 		}
@@ -78,7 +78,7 @@ public class MainMemoryBestFit {
         if(seg.segId < 0 || seg.segId > nSegments)
             System.out.println("Numero de segmento " + seg.segId + " invalido");
         else if(!inMemory(seg.segId))
-            System.out.println("Segmento " + seg.segId + " não está na memória");
+            System.out.println("Segmento " + seg.segId + " nao esta na memaria");
         else
             remove(seg.segId);
 
@@ -89,7 +89,7 @@ public class MainMemoryBestFit {
                 for(Segment x: pended) {
                     Boolean inserted = put(x, false);
                     if(inserted)
-                        System.out.println("Segmento " + x.segId + " que estava na lista de pendências foi inserido na memória");
+                        System.out.println("Segmento " + x.segId + " que estava na lista de pendencias foi inserido na memoria");
                 }
             }
     }

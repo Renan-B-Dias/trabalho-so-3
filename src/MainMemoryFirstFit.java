@@ -24,11 +24,11 @@ public class MainMemoryFirstFit {
     	try{
     		
     		if(seg.segId < 0 || seg.segId > nSegments-1) {
-    			throw new Exception("Segmento " + seg.segId + " inválido!"); 
+    			throw new Exception("Segmento " + seg.segId + " invalido!");
             }
 
             else if(inMemory(seg.segId)) {
-            	throw new Exception("Segmento " + seg.segId + " já esta na memória!");
+            	throw new Exception("Segmento " + seg.segId + " ja esta na memoria!");
             }
 
             else {
@@ -54,7 +54,7 @@ public class MainMemoryFirstFit {
                     for (int size = seg.segSize; size > 0; size--, i--)
                         mainMemory[i] = seg;
                     if(msg)
-                        System.out.println("Segmento " + seg.segId + " foi inserido na memória!");
+                        System.out.println("Segmento " + seg.segId + " foi inserido na memoria!");
                     return true;
                 }
                 else {
@@ -73,7 +73,7 @@ public class MainMemoryFirstFit {
         if(seg.segId < 0 || seg.segId > nSegments)
             System.out.println("Numero de segmento " + seg.segId + " invalido");
         else if(!inMemory(seg.segId))
-            System.out.println("Segmento " + seg.segId + " não está na memória");
+            System.out.println("Segmento " + seg.segId + " nao esta na memoria");
         else
             remove(seg.segId);
 
@@ -84,7 +84,7 @@ public class MainMemoryFirstFit {
                 for(Segment x: pended) {
                     Boolean inserted = put(x, false);
                     if(inserted)
-                        System.out.println("Segmento " + x.segId + " que estava na lista de pendências foi inserido na memória");
+                        System.out.println("Segmento " + x.segId + " que estava na lista de pendencias foi inserido na memoria");
                 }
             }
     }
@@ -107,7 +107,7 @@ public class MainMemoryFirstFit {
             if(mainMemory[i] != null)
                 if(mainMemory[i].segId == segId)
                     mainMemory[i] = null;
-        System.out.println("Segmento " + segId + " removido da memória!");
+        System.out.println("Segmento " + segId + " removido da memoria!");
     }
 
     private Boolean inMemory(int segId) {

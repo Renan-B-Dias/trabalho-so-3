@@ -7,28 +7,42 @@ public class Main {
 
     public static void main(String args[]) {
     	
-    	//Caso não haja argumentos suficiente uma mensagem de erro é mostrada para o usuário.
+        /**
+        * Caso nao haja argumentos suficiente uma mensagem de erro e mostrada para o usuario.
+        */
         if(args.length < 4) {
             System.out.println("Quantidade de argumentos faltando.");
             System.exit(1);
         }
-        
-        // Pega o valor do seed.
+
+        /**
+         * Pega o valor do seed.
+         */
         int seed = Integer.parseInt(args[0]);
-        
-        // Pega o tamanho da main
+
+        /**
+         * Pega o tamanho da main
+         */
         int main = Integer.parseInt(args[1]);
-        
-        // Pega quantidade de solicitações
+
+        /**
+         * Pega quantidade de solicitacoes
+         */
         int nreq = Integer.parseInt(args[2]);
 
-        //Pega quantidade de segmentos
+        /**
+         * Pega quantidade de segmentos
+         */
         int nseg = Integer.parseInt(args[3]);
-        
-        //Array de Segment que receberá todos os Segmentos requisitado.
+
+        /**
+         * Array de Segment que recebera todos os Segmentos requisitado.
+         */
         Segment segmentReq[] = new Segment[nseg];
-        
-        //Do-While que instância todos os segmentos
+
+        /**
+         * Do-While que instancia todos os segmentos
+         */
         int f = 0;
         int argsIndex = 4;
         do {
